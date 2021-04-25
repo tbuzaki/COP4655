@@ -1,0 +1,2 @@
+This is the stock app. To run the app, simply paste all the files into the www folder
+of a cordova project folder. Do not place images or js file into the cordova js or img files.
