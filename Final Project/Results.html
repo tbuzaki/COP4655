@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<!-- This is the results page. The results page shows the results from the search
+page. This page displays 10 datapoints gathered from the search, including a
+description of the stock company, several details about the company, the price of
+the stock at opening, at its high point for the day and its low point for the day.
+This page also contains a link back to the homepage and a link back to the search
+page, should the user wish to conduct a new search. -->
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.mobile-container {
+  max-width: 480px;
+  margin: auto;
+  background-color: green;
+  height: 1600px;
+  color: white;
+  border-radius: 10px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+  position: relative;
+}
+
+.topnav #myLinks {
+  display: none;
+}
+
+.topnav a {
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+
+.topnav a.icon {
+  background: black;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.button {
+  background-color: #336600;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<!-- This is the beginning of the body of the results page. On page load, the
+stockJson function is called from the stock.js file. This queries the stock api
+for the user input from the search page. The results are parsed in the stock.js
+file and are shown here in a list. -->
+<body onload="stockJson()">
+  <script src="stock.js"></script>
+<div class="mobile-container">
+<div class="topnav">
+  <p>Stock App</p>
+  <div id="myLinks">
+    <a href="https://lamp.cse.fau.edu/~cen4010s2020_g10/covid10/index.html">Covid Website</a>
+    <a href="https://lamp.cse.fau.edu/~tbuzaki2015/index.html/">Old Project Index</a>
+  </div>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<div style="padding-left:16px">
+  <h3>Results</h3>
+  <p><span style = "color: white">
+    Note: Some catagories might not populate. This is because those catagories
+    are not filled by the api. Examples: Microsoft(MSFT) does not populate everything
+    however, GameStop(GME) does populate everything. This is a case by case basis
+    on the api's end.
+    
+    Summary: <span id = "summary"></span><br><br>
+    City: <span id = "city"></span><br><br>
+    State: <span id = "state"></span><br><br>
+    Phone: <span id = "phone"></span><br><br>
+    Website: <span id = "website"></span><br><br>
+    Price (Open): <span id = "priceOpen"></span><br><br>
+    Price (Low): <span id = "priceLow"></span><br><br>
+    Price (High): <span id = "priceHigh"></span><br><br>
+    Industry: <span id = "industry"></span><br><br>
+    Currency: <span id = "currency"></span><br></span></p><br>
+</div>
+<button class="button"; onclick="goBack()">Back to Search</button>
+<br><br>
+<button class="button"; onclick="goLanding()">Back to Homepage</button>
+<br><br>
+<p>Thomas Buzaki - Z23362338</p>
+</div>
+
+<!-- Below are the functions for the page. The first function governs the
+functionality of the dropdown menu. The next two functions govern the onclick
+functions for goBack and goLanding respectively. -->
+<script>
+function myFunction() {
+  var x = document.getElementById("myLinks");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+<script>
+function goBack() {
+  location.replace("Search.html");
+}
+
+function goLanding() {
+  location.replace("Landing.html");
+}
+</script>
+</body>
+</html>

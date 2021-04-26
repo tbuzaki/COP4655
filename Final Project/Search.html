@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<!-- This is the search page. It is where the user can enter a stock icon into
+the search bar and, upon pressing the search button, it will bring the user to
+the results page with the results of the search displayed. There is also some
+brief instructions to the user on what to enter into the search bar. -->
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.mobile-container {
+  max-width: 480px;
+  margin: auto;
+  background-color: green;
+  height: 1600px;
+  color: white;
+  border-radius: 10px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+  position: relative;
+}
+
+.topnav #myLinks {
+  display: none;
+}
+
+.topnav a {
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+
+.topnav a.icon {
+  background: black;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.button {
+  background-color: #336600;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<!-- Below is the body of the search page. -->
+<body>
+<div class="mobile-container">
+<div class="topnav">
+  <p>Stock App</p>
+  <div id="myLinks">
+    <a href="https://lamp.cse.fau.edu/~cen4010s2020_g10/covid10/index.html">Covid Website</a>
+    <a href="https://lamp.cse.fau.edu/~tbuzaki2015/index.html/">Old Project Index</a>
+  </div>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<div style="padding-left:16px">
+  <h3>Search</h3>
+  <p> Enter Stock Symbol </p>
+  <p> Example: MSFT for Microsoft Corporation Sock </p>
+  <p class="card-text"><input type="text" id="stock" />
+    <button class ="button"; onclick="stockSearch()">Search</button>
+  </p>
+  <br><br>
+  <p>Thomas Buzaki - Z23362338</p>
+</div>
+</div>
+
+<!-- Below are the scripts for the search page. The first script is the function
+for the dropdown menu. The second script governs the onclick functionality to
+bring the user to the results page. It also saves the user input in the local
+storage for use later in the stock.js file. -->
+<script>
+function myFunction() {
+  var x = document.getElementById("myLinks");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+<script>
+function stockSearch() {
+  localStorage.setItem("stock", stock.value);
+  window.location.assign("Results.html")
+}
+</script>
+
+</body>
+</html>
