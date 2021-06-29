@@ -1,8 +1,0 @@
-Stock App Final Build
-
-How to use the code:
-
-1) Download all 4 files: index, Search, Results, and search.js.
-2) Create a Cordova Project.
-3) Replace the contents of the 'www' folder with the 4 files. Make sure all 4 are in the SAME folder; do not put search.js into a js folder. 
-4) Run the Cordova project on an emulator or android device. 
