@@ -1,0 +1,195 @@
+//Using Energia IDE
+
+#include <LiquidCrystal.h>
+#define RS 2
+#define EN 5
+#define D4 6
+#define D5 7
+#define D6 8
+#define D7 9
+#define NOTE_DS8 4978
+LiquidCrystal lcd(RS, EN, D4, D5, D6, D7); 
+//Pins
+int motorOverridePin = 10; //set pin
+int intervalUpPin = 11; //set pin
+int intervalDownPin = 12; //set pin
+int reservoirSensorPin = 13;
+int buzzerPin = 14;
+int bowlSensorPin = 15; 
+int motorOn = 18;
+int LED = 19;
+//Variables
+int timer = 0;
+int minutes = 0;
+int feedCount = 10;
+int intervalUp = 0;
+int intervalDown = 0;
+int motorOverride = 0;
+int reservoirSensor = 1;
+int reservoirSensorIn = 0;
+int bowlSensor = 0;
+int fullBowl = 0;
+int feedInterval = 400;
+int melody = NOTE_DS8;
+int noteDuration = 1000/4;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(motorOverridePin, INPUT_PULLUP);
+  pinMode(intervalUpPin, INPUT_PULLUP);
+  pinMode(intervalDownPin, INPUT_PULLUP);
+  pinMode(reservoirSensorPin, INPUT_PULLUP);
+  pinMode(LED, OUTPUT);
+  pinMode(motorOn, OUTPUT);
+  getValues();
+  lcd.begin(16, 2);//fix
+  lcd.setCursor(0,0);
+  lcd.print("Hello");
+}
+
+void loop() {
+    getValues();
+    bowlCheck();
+    if (Serial.available())
+    {
+      char data_received; 
+      Serial.print(bowlSensor);
+      Serial.write("\n");
+      data_received = Serial.read();
+      if (data_received == '1')
+      {
+        up();    
+        Serial.write("Increasing feed interval by 5 minutes.\n");        
+      }
+      if (data_received == '2')
+      {
+        down();
+        Serial.write("Decreasing feed interval by 5 minutes.\n");
+      }
+      if (data_received == '3')
+      {
+        motor();
+        Serial.write("Motor Override.\n");
+      }
+       if (data_received == '4')
+      {
+        emptyReservoir();
+      }
+        if (data_received == '5')
+      {
+        fullReservoir();
+      }
+    }
+    delay(3000);
+    timer = timer + 3;
+    minutes = feedInterval/60;
+    Serial.write("Time until next feeding, in minutes:\n");
+    Serial.print(minutes);
+    Serial.write("\n");
+}
+
+void up()
+{
+  feedInterval = feedInterval + 300;
+  delay(1000);
+  Serial.print(feedInterval);
+  Serial.write("\n");
+  digitalWrite(LED, HIGH);
+  timer = timer + 1;
+}
+
+void down()
+{
+  feedInterval = feedInterval - 300;
+  delay(1000);
+  Serial.print(feedInterval);
+  Serial.write("\n");
+  digitalWrite(LED, LOW);
+  timer = timer + 1;
+}
+
+void motor()
+{
+   tone(motorOn, melody, noteDuration);
+   delay(1000);
+   noTone(motorOn);
+   feedCount = feedCount - 1;
+   timer = timer + 1;
+}
+
+void getValues()
+{
+  if(feedCount < 1)
+  {
+   refillNeeded();
+  }
+  bowlSensor = analogRead(bowlSensorPin);
+  motorOverride = digitalRead(motorOverridePin);
+  if(motorOverride == 0)
+  {
+    motor();
+  }
+  intervalUp = digitalRead(intervalUpPin);
+  if(intervalUp == 0)
+  {
+    up();
+  }
+  intervalDown = digitalRead(intervalDownPin);
+  if(intervalDown == 0)
+  {
+    down();
+  }
+  reservoirSensorIn = digitalRead(reservoirSensorPin);
+  if(reservoirSensorIn == 0)
+  {
+    fullReservoir();
+  }
+}
+
+void emptyReservoir()
+{
+  reservoirSensor = 0;
+  Serial.write("Set reservoir to empty.\n");
+}
+
+void fullReservoir()
+{
+  reservoirSensor = 1;
+  feedCount = 10;
+  Serial.write("Set reservoir to full.\n");
+}
+void refillNeeded()
+{
+    emptyReservoir();
+    tone(buzzerPin, melody, noteDuration);
+    digitalWrite(LED, HIGH);
+    delay(1000);
+    digitalWrite(LED, LOW);
+    noTone(buzzerPin);
+    timer = timer + 1;
+}
+void bowlCheck()
+{
+  if(bowlSensor > 800)
+  {
+    if(feedInterval > timer)
+    {
+      Serial.write("Bowl is empty, but it is not feeding time yet.\n");
+    }
+    else
+    {
+      if(reservoirSensor == 1)
+      {
+        Serial.write("Feeding time.\n");
+        motor();
+        timer = 0;
+      }
+      else
+      {
+        Serial.write("It is feeding time but reservoir is empty.\n");
+        refillNeeded();
+      }
+    }
+  }
+}
